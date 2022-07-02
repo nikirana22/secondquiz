@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quiz/provider/quiz_provider.dart';
 import 'package:quiz/provider/timer_provider.dart';
 
-class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
+class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomTabBar({Key? key}) : super(key: key);
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
-
-    Size size=MediaQuery.of(context).size;
-    double height=size.height;
-    double width=size.width;
-    // timerprovider=Provider.of<TimerProvider>(context);
-
-    QuizProvider quizProvider=Provider.of<QuizProvider>(context,listen: false);
-
+    Provider.of<TimerProvider>(context, listen: false)
+        .initTimerForState(TIMER_STATE.tenSecondTimerState);
+    Size size = MediaQuery.of(context).size;
+    double height = size.height;
+    double width = size.width;
     return Container(
-      height: height*0.15,
+      height: height * 0.15,
       margin: const EdgeInsets.only(top: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -32,8 +24,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
             size: 35,
           ),
           Container(
-            height:height*0.09,
-            width: width*0.2,
+            height: height * 0.09,
+            width: width * 0.2,
             decoration: const BoxDecoration(
               // color: Colors.red,
               shape: BoxShape.circle,
@@ -41,12 +33,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
             ),
             child: Center(
               child: Consumer<TimerProvider>(
-                builder: (_,timerProvider,child){
-                  timerProvider.startTimer(quizProvider);
-                  //todo we can call the quiz provider from here as well
-                  // if(timerProvider.time>0){
-                  //   quizProvider.moveToNextQuestion();
-                  // }
+                builder: (_, timerProvider, child) {
                   return Text(
                     timerProvider.time.toString(),
                     style: const TextStyle(
@@ -59,7 +46,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
             ),
           ),
           Row(
-            children:const [
+            children: const [
               Icon(
                 Icons.heart_broken,
                 color: Colors.white70,
@@ -70,7 +57,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
               ),
               Text(
                 '{quiz.life}',
-                style:TextStyle(fontSize: 19, color: Colors.white70),
+                style: TextStyle(fontSize: 19, color: Colors.white70),
               )
             ],
           )
@@ -80,6 +67,5 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
   }
 
   @override
-  Size get preferredSize =>const Size.fromHeight(150);
+  Size get preferredSize => const Size.fromHeight(150);
 }
-

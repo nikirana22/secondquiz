@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quiz/provider/quiz_provider.dart';
+
 /// Timer cases:
 /// 1) A 10 sec timer should be started by default as long as the quiz lasts, which provides 2 scenarios:
 /// a) Timer reaches 0 -> Next Question
@@ -13,31 +16,62 @@ import 'package:quiz/provider/quiz_provider.dart';
 /// Task for later -> If the 10 sec timer has less than 3 seconds then don't start the 3 sec timer
 /// */
 
-class TimerProvider with ChangeNotifier{
-  int time=11;
-  Timer? _timer;
+enum TIMER_STATE {
+  tenSecondTimerState,
+  threeSecondTimer,
+}
 
-  void stopTimer() {
-    _timer!.cancel();
+extension TimerStateExtension on TIMER_STATE {
+  int get value {
+    switch (this) {
+      case TIMER_STATE.tenSecondTimerState:
+        return 10;
+      case TIMER_STATE.threeSecondTimer:
+        return 3;
+    }
+  }
+}
+
+class TimerProvider with ChangeNotifier {
+  int time = 0;
+  Timer? _timer;
+  BuildContext context;
+  // QuizProvider? provider;
+
+  TimerProvider({required this.context});
+
+  void stopCurrentTimer() {
+    _timer?.cancel();
+    _timer = null;
   }
 
-  void startTimer(QuizProvider quizProvider) {
-    _timer = Timer.periodic(const Duration(seconds: 1), (thistimer) {
+  /**Managing both timer here for both Ten second as well as three second
+   * since there will only be one timer at a time
+   *
+   * @author: Ehtishaam */
+
+  void initTimerForState(TIMER_STATE timerState) {
+    if (_timer != null) {
+      stopCurrentTimer();
+    }
+    time = timerState.value;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time > 0) {
-        time--;
         notifyListeners();
-        stopTimer();
-      }
-      else {
-        timeFinished(quizProvider);
+        time--;
+      } else {
+        timeFinished();
       }
     });
   }
 
-  void timeFinished(QuizProvider quizProvider) {
-    if (quizProvider.questionIndex < quizProvider.list.length - 1) {
+  void timeFinished() {
+    print("timerFinished is called");
+    stopCurrentTimer();
+    Provider.of<QuizProvider>(context, listen: false).moveToNextQuestion();
+    /* if (quizProvider.questionIndex < quizProvider.list.length - 1) {
       quizProvider.moveToNextQuestion();
       time = 10;
-    }
+    }*/
   }
 }

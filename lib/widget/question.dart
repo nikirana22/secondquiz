@@ -7,7 +7,6 @@ class Question extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     QuizProvider quizProvider = Provider.of<QuizProvider>(context);
     return Container(
       width: double.infinity,

@@ -9,11 +9,15 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) {
-          return TimerProvider();
-        }),
-        ChangeNotifierProvider(create: (_) {
           return QuizProvider();
-        })
+        }),
+        ChangeNotifierProvider(create: (ctx) {
+          return TimerProvider(context: ctx);
+        }),
+   /*     ChangeNotifierProxyProvider<QuizProvider, TimerProvider>(
+            create: (_) => TimerProvider(),
+            update: (_, quizProvider, previousState) =>
+            previousState ?? TimerProvider(provider: quizProvider)),*/
       ],
       child: const MyApp(),
     ),
