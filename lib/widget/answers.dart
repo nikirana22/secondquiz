@@ -41,7 +41,7 @@ class _AnswersState extends State<Answers> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25)),
                   tileColor: changeTileColorOnButtonClick(
-                      quizProvider.isCorrectAnswer(index),index,_selectedValue /*will allso need listview indes if we need to only change the selected btn*/) /*quizProvider.colorList[index]*/,
+                      quizProvider.isCorrectAnswer(index),index /*will allso need listview indes if we need to only change the selected btn*/) /*quizProvider.colorList[index]*/,
                   trailing: _selectedValue != null &&
                           quizProvider.isCorrectAnswer(index)
                       ? const Icon(Icons.check)
