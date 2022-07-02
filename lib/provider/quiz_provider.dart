@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quiz/provider/timer_provider.dart';
 
-class QuizProvider with ChangeNotifier{
-  List list =  [
+import '../provider/timer_provider.dart';
+
+class QuizProvider with ChangeNotifier {
+  List<Map<String, Object>> list = [
     {
       'question': 'what is your name',
       'answer': ['sonu', 'Biki', 'Chiki'],
@@ -45,87 +46,63 @@ class QuizProvider with ChangeNotifier{
       'ans': 'Robert',
     },
   ];
+
   // int? _itemselect;
-  int _result=0;
+  int _result = 0;
   int _questionIndex = 0;
   int _life = 3;
+  bool shouldShowResult = false;
 
   TimerProvider? timerProvider;
 
-  final  List<Icon> iconList =  [
+  final List<Icon> iconList = [
     const Icon(Icons.check_box_outline_blank),
     const Icon(Icons.check_box_outline_blank),
     const Icon(Icons.check_box_outline_blank)
   ];
-  final  List<Color> colorList =  [Colors.white, Colors.white, Colors.white];
+  final List<Color> colorList = [Colors.white, Colors.white, Colors.white];
 
+  int get questionIndex => _questionIndex;
 
-  int get questionIndex=>_questionIndex;
-  int get life=>_life;
-  // int get time=>_time;
-  // bool get clickable =>_clickable;
-  int get result=>_result;
-  // int get itemSelect=>_itemselect!;
+  int get life => _life;
 
-  //todo check timer
-  // void startTimer() {
-  //   stopTimer();
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (thistimer) {
-  //     if (_time > 0) {
-  //         _time--;
-  //       notifyListeners();
-  //       stopTimer();
-  //     }
-  //     else {
-  //       timeFinished();
-  //     }
-  //   });
-  // }
-  // void stopTimer() {
-  //   _timer?.cancel();
-  // }
-  // void timeFinished() {
-  //   if (_questionIndex < list.length-1&&_itemselect==null) {
-  //     moveToNextQuestion();
-  //   }
-  //   else if(_questionIndex < list.length-1&&_itemselect!=null){
-  //     // iconList[_itemselect!] = const Icon(Icons.check_box_outline_blank);
-  //     // colorList[_itemselect!] = Colors.white;
-  //     moveToNextQuestion();
-  //   }
-  // }
-  void moveToNextQuestion(){
+  int get result => _result;
+
+  void next() {
     // _time = 10;
-    _questionIndex++;
+    if (_questionIndex < list.length - 1) {
+      _questionIndex++;
+    } else {
+      shouldShowResult = true;
+    }
     notifyListeners();
   }
+
   void resetButton() {
-      _questionIndex = 0;
-      // _time = 10;
-      notifyListeners();
+    _questionIndex = 0;
+    // _time = 10;
+    notifyListeners();
   }
-  void afterButtonClickTimer(){
-    if(timerProvider!.time>3){
-        timerProvider!.time=4;
+
+  bool isLastQuestion() {
+    return questionIndex == list.length - 1;
+  }
+
+  void afterButtonClickTimer() {
+    if (timerProvider!.time > 3) {
+      timerProvider!.time = 4;
     }
     // notifyListeners();
   }
-  //refactor to a better name
-  // void changeColor( Color color, Icon icon) {
-  //   timerProvider!.stopTimer();
-  //     iconList[_itemselect!] = icon;
-  //     colorList[_itemselect!] = color;
-  //     afterButtonClickTimer();
-  // }
 
   bool isCorrectAnswer(int index) {
-    return list[_questionIndex]["answer"][index] ==
+    return (list[_questionIndex]["answer"] as List<String>)[index] ==
         list[_questionIndex]["ans"];
   }
 
-  void optionSelected(TimerProvider timerProvider){
-    if(timerProvider.time>3){
-      timerProvider.time=3;
+  void optionSelected(TimerProvider timerProvider) {
+    if (timerProvider.time > 3) {
+      timerProvider.time = 3;
     }
   }
 
@@ -148,17 +125,16 @@ class QuizProvider with ChangeNotifier{
   // }
 
   void lifeDecrease() {
-    if ( _life> 1) {
+    if (_life > 1) {
       //------Notifier Listener
-        _life--;
-    } else {
-    }
+      _life--;
+    } else {}
   }
-  // void resetData(){
-  //   _result=0;
-  //    _questionIndex = 0;
-  //    _life = 3;
-  //    _time = 10;
-  //    _clickable = true;
-  // }
+// void resetData(){
+//   _result=0;
+//    _questionIndex = 0;
+//    _life = 3;
+//    _time = 10;
+//    _clickable = true;
+// }
 }

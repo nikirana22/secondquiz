@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quiz/provider/quiz_provider.dart';
+
+import '../provider/quiz_provider.dart';
 
 /// Timer cases:
 /// 1) A 10 sec timer should be started by default as long as the quiz lasts, which provides 2 scenarios:
@@ -36,7 +37,6 @@ class TimerProvider with ChangeNotifier {
   int time = 0;
   Timer? _timer;
   BuildContext context;
-  // QuizProvider? provider;
 
   TimerProvider({required this.context});
 
@@ -45,10 +45,15 @@ class TimerProvider with ChangeNotifier {
     _timer = null;
   }
 
-  /**Managing both timer here for both Ten second as well as three second
-   * since there will only be one timer at a time
-   *
-   * @author: Ehtishaam */
+  void _resetTimer() {
+    stopCurrentTimer();
+    initTimerForState(TIMER_STATE.tenSecondTimerState);
+  }
+
+  /// Managing both timer here for both Ten second as well as three second
+  /// since there will only be one timer at a time
+  ///
+  /// @author: Ehtishaam
 
   void initTimerForState(TIMER_STATE timerState) {
     if (_timer != null) {
@@ -60,18 +65,18 @@ class TimerProvider with ChangeNotifier {
         notifyListeners();
         time--;
       } else {
-        timeFinished();
+        onTimeFinished();
       }
     });
   }
 
-  void timeFinished() {
-    print("timerFinished is called");
-    stopCurrentTimer();
-    Provider.of<QuizProvider>(context, listen: false).moveToNextQuestion();
-    /* if (quizProvider.questionIndex < quizProvider.list.length - 1) {
-      quizProvider.moveToNextQuestion();
-      time = 10;
-    }*/
+  void onTimeFinished() {
+    var provider = Provider.of<QuizProvider>(context, listen: false);
+    if (provider.isLastQuestion()) {
+      stopCurrentTimer();
+    } else {
+      _resetTimer();
+    }
+    provider.next();
   }
 }
