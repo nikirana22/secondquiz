@@ -9,17 +9,17 @@ class Answers extends StatefulWidget {
 
   @override
   State<Answers> createState() => _AnswersState();
+
 }
 
 class _AnswersState extends State<Answers> {
   TimerProvider? timerProvider;
-  int? _selectedValue;
+  // int? _selectedValue;
 
   @override
   Widget build(BuildContext context) {
     print('check if this is calling on every tick--------------------------');
-    QuizProvider quizProvider =
-        Provider.of<QuizProvider>(context);
+    QuizProvider quizProvider = Provider.of<QuizProvider>(context);
     timerProvider = Provider.of<TimerProvider>(context,listen: false);
     Size size = MediaQuery.of(context).size;
     double height = size.height;
@@ -41,8 +41,8 @@ class _AnswersState extends State<Answers> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25)),
                   tileColor: changeTileColorOnButtonClick(
-                      quizProvider.isCorrectAnswer(index),index,_selectedValue /*will allso need listview indes if we need to only change the selected btn*/) /*quizProvider.colorList[index]*/,
-                  trailing: _selectedValue != null &&
+                      quizProvider.isCorrectAnswer(index),index,quizProvider /*will allso need listview indes if we need to only change the selected btn*/) /*quizProvider.colorList[index]*/,
+                  trailing: quizProvider.selectedItem != null &&
                           quizProvider.isCorrectAnswer(index)
                       ? const Icon(Icons.check)
                       : const Icon(Icons.cancel_outlined),
@@ -57,16 +57,23 @@ class _AnswersState extends State<Answers> {
                         fontWeight: FontWeight.bold,
                         fontSize: 20),
                   ),
-                  onTap:
-                  _selectedValue == null
-                      ?
-                  () {
-                    print('index $index');
-                          _selectedValue = index;
-                          quizProvider.optionSelected(timerProvider!);
+
+                  // onTap:
+                  // _selectedValue == null
+                  //     ?
+                  // () {
+                  //   print('index $index');
+                  //         _selectedValue = index;
+                  //         quizProvider.optionSelected(timerProvider!);
+                  //   setState((){});
+                  //       }
+                  //     : null,
+
+                  onTap: quizProvider.selectedItem==null?(){
+                    quizProvider.selectedItem=index;
+                    quizProvider.optionSelected(timerProvider!);
                     setState((){});
-                        }
-                      : null,
+                  }:null,
                 ),
               ],
             );
@@ -76,12 +83,19 @@ class _AnswersState extends State<Answers> {
   }
 
   //refactor to a better name
-  Color changeTileColorOnButtonClick(bool isCorrectAnswer,int index) {
+  Color changeTileColorOnButtonClick(bool isCorrectAnswer,int index,QuizProvider quizProvider) {
     Color tileColor = Colors.white;
     /*if (_selectedValue == null) {
       tileColor = Colors.white;
     } else*/
-    if (_selectedValue != null && _selectedValue == index) {
+    // if (_selectedValue != null && _selectedValue == index) {
+    //     if (isCorrectAnswer) {
+    //     tileColor = Colors.green;
+    //   } else {
+    //     tileColor = Colors.red;
+    //   }
+    // }
+    if (quizProvider.selectedItem != null && quizProvider.selectedItem == index) {
       if (isCorrectAnswer) {
         tileColor = Colors.green;
       } else {

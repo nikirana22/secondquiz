@@ -6,10 +6,6 @@ import 'package:quiz/provider/timer_provider.dart';
 class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
   const CustomTabBar({Key? key}) : super(key: key);
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
 

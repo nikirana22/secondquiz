@@ -31,10 +31,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Home(),
+      home: const
+      Home(),
+
       // todo :- how can we change the color of listtile on click()
       //todo :- how can we increase app size from AppBar class
       //todo :- AppBar class has an overrided method but this class(Overrided method ) is not returning anything
     );
+
   }
 }

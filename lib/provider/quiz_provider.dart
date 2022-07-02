@@ -45,11 +45,11 @@ class QuizProvider with ChangeNotifier{
       'ans': 'Robert',
     },
   ];
-  // int? _itemselect;
   int _result=0;
   int _questionIndex = 0;
   int _life = 3;
 
+  int? selectedItem;
   TimerProvider? timerProvider;
 
   final  List<Icon> iconList =  [
@@ -97,6 +97,7 @@ class QuizProvider with ChangeNotifier{
   void moveToNextQuestion(){
     // _time = 10;
     _questionIndex++;
+    selectedItem=null;
     notifyListeners();
   }
   void resetButton() {

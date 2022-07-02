@@ -14,13 +14,14 @@ class Home extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
     double width = size.width;
-    QuizProvider quizProvider = Provider.of<QuizProvider>(context, listen: false);
-    return quizProvider.questionIndex >= quizProvider.list.length-1
+    QuizProvider quizProvider =
+        Provider.of<QuizProvider>(context, listen: false);
+    return quizProvider.questionIndex >= quizProvider.list.length - 1
         ? const Result()
         : Scaffold(
-            appBar:const CustomTabBar(
-              // time: quizProvider.time,
-            ),
+            appBar: const CustomTabBar(
+                // time: quizProvider.time,
+                ),
             backgroundColor: const Color.fromRGBO(51, 145, 243, 1),
             body: SingleChildScrollView(
                 child: Padding(
@@ -34,16 +35,17 @@ class Home extends StatelessWidget {
                     width: width * 0.9,
                     height: height * 0.25,
                   ),
-                  Consumer<QuizProvider>(builder: (BuildContext context, provider, Widget? child) {
-                    return Text(
-                      'question ${provider.questionIndex + 1} of ${quizProvider.list.length}',
-                      style: const TextStyle(color: Colors.white70, fontSize: 17),
-                    );
-                  },
-
+                  Consumer<QuizProvider>(
+                    builder: (BuildContext context, provider, Widget? child) {
+                      return Text(
+                         'question ${provider.questionIndex + 1} of ${quizProvider.list.length}',
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 17),
+                      );
+                    },
                   ),
                   const Question(),
-                   Answers()
+                  Answers()
                 ],
               ),
             )),
