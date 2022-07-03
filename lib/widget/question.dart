@@ -14,7 +14,7 @@ class Question extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10),
       child: Text(
         // title,
-        quizProvider.list[quizProvider.questionIndex]['question'],
+        quizProvider.list[quizProvider.questionIndex]['question'] as String,
         style: const TextStyle(
             fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
       ),
