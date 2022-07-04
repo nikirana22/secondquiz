@@ -39,19 +39,22 @@ class TimerProvider with ChangeNotifier {
   TIMER_STATE _timerState = TIMER_STATE.tenSecondTimerState;
   late int time = _timerState.value;
 
+  TIMER_STATE get currentTimerState => _timerState;
+
   TimerProvider({required this.context});
 
   void stopCurrentTimer() {
     _timer?.cancel();
     _timer = null;
-    _timerState = TIMER_STATE.tenSecondTimerState;
-    time = _timerState.value;
   }
 
   //TODO: need to test
 
   void switchTimerState(TIMER_STATE timerState) {
-    if(timerState != _timerState) {
+/*    print("switchTimerState: ${_timerState != timerState}");
+    print("switchTimerState: currentTimerState is: $_timerState");
+    print("switchTimerState: passed in Timer state  is: $timerState");*/
+    if (timerState != _timerState) {
       stopCurrentTimer();
       _timerState = timerState;
       time = timerState.value;
@@ -61,6 +64,8 @@ class TimerProvider with ChangeNotifier {
 
   void _resetTimer() {
     stopCurrentTimer();
+    _timerState = TIMER_STATE.tenSecondTimerState;
+    time = _timerState.value;
     initTimer();
   }
 

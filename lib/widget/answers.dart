@@ -12,14 +12,22 @@ class Answers extends StatefulWidget {
 }
 
 class _AnswersState extends State<Answers> {
-  TimerProvider? timerProvider;
   int? _selectedValue;
+
+  @override
+  void didUpdateWidget(covariant Answers oldWidget) {
+    var timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    if (timerProvider.currentTimerState == TIMER_STATE.tenSecondTimerState) {
+      _selectedValue = null;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
     print('check if this is calling on every tick--------------------------');
     QuizProvider quizProvider = Provider.of<QuizProvider>(context);
-    timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    var timerProvider = Provider.of<TimerProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
     double height = size.height;
     double width = size.width;
@@ -62,7 +70,9 @@ class _AnswersState extends State<Answers> {
                       ? () {
                           print('index $index');
                           _selectedValue = index;
-                          quizProvider.optionSelected(timerProvider!);
+                          quizProvider.optionSelected(index);
+                          timerProvider
+                              .switchTimerState(TIMER_STATE.threeSecondTimer);
                           setState(() {});
                         }
                       : null,

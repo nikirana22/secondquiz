@@ -53,7 +53,7 @@ class QuizProvider with ChangeNotifier {
   int _life = 3;
   bool shouldShowResult = false;
 
-  TimerProvider? timerProvider;
+  // TimerProvider? timerProvider;
 
   final List<Icon> iconList = [
     const Icon(Icons.check_box_outline_blank),
@@ -88,22 +88,23 @@ class QuizProvider with ChangeNotifier {
     return questionIndex == list.length - 1;
   }
 
-  void afterButtonClickTimer() {
+/*  void afterButtonClickTimer() {
     if (timerProvider!.time > 3) {
       timerProvider!.time = 4;
     }
     // notifyListeners();
-  }
+  }*/
 
   bool isCorrectAnswer(int index) {
     return (list[_questionIndex]["answer"] as List<String>)[index] ==
         list[_questionIndex]["ans"];
   }
 
-  void optionSelected(TimerProvider timerProvider) {
-    if (timerProvider.time > 3) {
+  void optionSelected(int index) {
+    //Switch timer logic can go here or on UI in answers.dart line 72
+   /* if (timerProvider.time > 3) {
       timerProvider.time = 3;
-    }
+    }*/
   }
 
   // void optionSelected(int selectedItemIndex,TimerProvider timerProvider){
