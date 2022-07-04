@@ -34,20 +34,34 @@ extension TimerStateExtension on TIMER_STATE {
 }
 
 class TimerProvider with ChangeNotifier {
-  int time = 0;
   Timer? _timer;
   BuildContext context;
+  TIMER_STATE _timerState = TIMER_STATE.tenSecondTimerState;
+  late int time = _timerState.value;
 
   TimerProvider({required this.context});
 
   void stopCurrentTimer() {
     _timer?.cancel();
     _timer = null;
+    _timerState = TIMER_STATE.tenSecondTimerState;
+    time = _timerState.value;
+  }
+
+  //TODO: need to test
+
+  void switchTimerState(TIMER_STATE timerState) {
+    if(timerState != _timerState) {
+      stopCurrentTimer();
+      _timerState = timerState;
+      time = timerState.value;
+      initTimer();
+    }
   }
 
   void _resetTimer() {
     stopCurrentTimer();
-    initTimerForState(TIMER_STATE.tenSecondTimerState);
+    initTimer();
   }
 
   /// Managing both timer here for both Ten second as well as three second
@@ -55,11 +69,8 @@ class TimerProvider with ChangeNotifier {
   ///
   /// @author: Ehtishaam
 
-  void initTimerForState(TIMER_STATE timerState) {
-    if (_timer != null) {
-      stopCurrentTimer();
-    }
-    time = timerState.value;
+  void initTimer() {
+    stopCurrentTimer();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time > 0) {
         notifyListeners();
@@ -78,5 +89,9 @@ class TimerProvider with ChangeNotifier {
       _resetTimer();
     }
     provider.next();
+  }
+
+  double get currentCountDownPercent {
+    return (1 - (time / _timerState.value));
   }
 }
