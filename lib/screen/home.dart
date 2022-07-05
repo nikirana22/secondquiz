@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../provider/quiz_provider.dart';
 import '../screen/result.dart';
 import '../widget/answers.dart';
@@ -15,18 +14,30 @@ class Home extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
     double width = size.width;
-    QuizProvider quizProvider = Provider.of<QuizProvider>(context);
+    Provider.of<QuizProvider>(context);
     return Selector<QuizProvider, bool>(
       selector: (_, quizProvider) {
         return quizProvider.shouldShowResult;
       },
       builder: (_, showResult, child) => showResult
-          ? const Result()
-          : Scaffold(
+          ? const Result():
+                    Container(
+            decoration:const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(49, 148, 244, 1),
+                      Color.fromRGBO(84, 114, 236, 1),
+                    ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter
+                )
+            ),
+                child:
+           Scaffold(
+              backgroundColor: Colors.transparent,
               appBar: const CustomTabBar(
-                  // time: quizProvider.time,
-                  ),
-              backgroundColor: const Color.fromRGBO(51, 145, 243, 1),
+
+              ),
               body: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -43,7 +54,7 @@ class Home extends StatelessWidget {
                         builder:
                             (BuildContext context, provider, Widget? child) {
                           return Text(
-                            'question ${provider.questionIndex + 1} of ${quizProvider.list.length}',
+                            'question ${provider.questionIndex + 1} of ${provider.list.length}',
                             style: const TextStyle(
                                 color: Colors.white70, fontSize: 17),
                           );
@@ -56,6 +67,7 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
+      ),
     ); /*quizProvider.questionIndex >= quizProvider.list.length-1*/
   }
 }

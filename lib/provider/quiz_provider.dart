@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../provider/timer_provider.dart';
 
 class QuizProvider with ChangeNotifier {
+
   List<Map<String, Object>> list = [
     {
       'question': 'what is your name',
@@ -46,30 +46,23 @@ class QuizProvider with ChangeNotifier {
       'ans': 'Robert',
     },
   ];
-
-  // int? _itemselect;
   int _result = 0;
   int _questionIndex = 0;
   int _life = 3;
   bool shouldShowResult = false;
 
-  // TimerProvider? timerProvider;
 
-  final List<Icon> iconList = [
-    const Icon(Icons.check_box_outline_blank),
-    const Icon(Icons.check_box_outline_blank),
-    const Icon(Icons.check_box_outline_blank)
-  ];
-  final List<Color> colorList = [Colors.white, Colors.white, Colors.white];
-
+  // final List<Icon> iconList = [
+  //   const Icon(Icons.check_box_outline_blank),
+  //   const Icon(Icons.check_box_outline_blank),
+  //   const Icon(Icons.check_box_outline_blank)
+  // ];
+  // final List<Color> colorList = [Colors.white, Colors.white, Colors.white];
   int get questionIndex => _questionIndex;
-
   int get life => _life;
-
   int get result => _result;
 
   void next() {
-    // _time = 10;
     if (_questionIndex < list.length - 1) {
       _questionIndex++;
     } else {
@@ -78,64 +71,46 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetButton() {
-    _questionIndex = 0;
-    // _time = 10;
-    notifyListeners();
-  }
+  // void resetButton() {
+  //   _questionIndex = 0;
+  //   _life=3;
+  //   _result=0;
+  // }
 
   bool isLastQuestion() {
     return questionIndex == list.length - 1;
   }
-
-/*  void afterButtonClickTimer() {
-    if (timerProvider!.time > 3) {
-      timerProvider!.time = 4;
-    }
-    // notifyListeners();
-  }*/
 
   bool isCorrectAnswer(int index) {
     return (list[_questionIndex]["answer"] as List<String>)[index] ==
         list[_questionIndex]["ans"];
   }
 
-  void optionSelected(int index) {
-    //Switch timer logic can go here or on UI in answers.dart line 72
-   /* if (timerProvider.time > 3) {
-      timerProvider.time = 3;
-    }*/
+  void timeFinishedwithoutClick(){
+    lifeDecrease();
   }
 
-  // void optionSelected(int selectedItemIndex,TimerProvider timerProvider){
-  //   this.timerProvider=timerProvider;
-  //   // _itemselect=selectedItemIndex;
-  //   //   _clickable = false;
-  //     if(isCorrectAnswer(selectedItemIndex)) {
-  //       // changeColor( Colors.green,
-  //       //     const Icon(Icons.check));
-  //       _result++;
-  //     }
-  //     else {
-  //       lifeDecrease();
-  //       // changeColor( Colors.red,
-  //       //     const Icon(Icons.cancel_outlined));
-  //     notifyListeners();
-  //     }
-  //     afterButtonClickTimer();
-  // }
+  void resultIncrease(){
+    _result++;
+  }
+  void optionSelected(int index){
+    if(isCorrectAnswer(index)){
+      resultIncrease();
+    }
+    else{
+      lifeDecrease();
+    }
+  }
 
   void lifeDecrease() {
-    if (_life > 1) {
-      //------Notifier Listener
+    if (_life > 0) {
       _life--;
-    } else {}
+    }
   }
-// void resetData(){
-//   _result=0;
-//    _questionIndex = 0;
-//    _life = 3;
-//    _time = 10;
-//    _clickable = true;
-// }
+void resetQuiz(){
+  _result=0;
+   _questionIndex = 0;
+   _life = 3;
+   shouldShowResult=false;
+  }
 }

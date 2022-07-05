@@ -18,7 +18,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
   @override
   void initState() {
     animationController =
-        AnimationController(vsync: this, duration: const Duration(minutes: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     sizeAnimation =
         Tween<Size>(begin: const Size(10, 10), end: const Size(288, 300)).animate(
             CurvedAnimation(
@@ -41,12 +41,11 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
         actions: [
           IconButton(
             onPressed: () {
-
-              // quizProvider.resetData();
+              quizProvider.resetQuiz();
               Navigator.of(
                 context,
               ).pushReplacement(MaterialPageRoute(builder: (_) {
-                return Home();
+                return const Home();
               }));
             },
             icon: const Icon(Icons.close),
@@ -55,7 +54,6 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
       ),
       body: Center(
         child: Container(
-
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: Colors.white,
@@ -68,14 +66,11 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
               const Flexible(child:SizedBox(height: 10,)),
               Flexible(
                 flex: 4,
-                child: Container(
-
-                  color: Colors.yellow,
+                child: SizedBox(
                   child: Image.asset(
-
                     'assets/ballon.png',
                     height: sizeAnimation!.value.height,
-                    width: sizeAnimation!.value.width,
+                    width: sizeAnimation!.value.width*0.5,
                     fit: BoxFit.fill,
                     // fit: BoxFit,
                   ),
@@ -163,8 +158,8 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
     return Flex(
       mainAxisAlignment: MainAxisAlignment.center,
       direction: Axis.horizontal,
-      children: const [
-        Flexible(
+      children:  [
+        const Flexible(
           flex: 4,
           child: Text(
             'Share with us : ',
@@ -173,16 +168,21 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
         ),
         Flexible(
           flex: 2,
-            child: Icon(Icons.email)),
-        Flexible(
+            child: Icon(Icons.email,
+              size: sizeAnimation!.value.width*0.05,
+
+            )),
+        const Flexible(
           flex: 2,
           child: SizedBox(
             width: 5,
           ),
         ),
-        // Flexible(child: Icon(Icons.facebook)),
+        Flexible(child: Icon(Icons.facebook,
+          size: sizeAnimation!.value.width*0.05,
+        )),
         
-        Flexible(
+        const Flexible(
           flex: 1,
           child: SizedBox(
             width: 5,
@@ -192,6 +192,7 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
           flex: 1,
           child: Icon(
             Icons.whatsapp,
+            size: sizeAnimation!.value.width*0.05,
             color: Colors.black,
           ),
         ),

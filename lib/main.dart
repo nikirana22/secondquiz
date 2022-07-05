@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quiz/provider/quiz_provider.dart';
-import 'package:quiz/provider/timer_provider.dart';
-import 'package:quiz/screen/home.dart';
+import '../provider/quiz_provider.dart';
+import '../provider/timer_provider.dart';
+import '../screen/home.dart';
 
 void main() {
   runApp(
@@ -14,10 +14,6 @@ void main() {
         ChangeNotifierProvider(create: (ctx) {
           return TimerProvider(context: ctx);
         }),
-   /*     ChangeNotifierProxyProvider<QuizProvider, TimerProvider>(
-            create: (_) => TimerProvider(),
-            update: (_, quizProvider, previousState) =>
-            previousState ?? TimerProvider(provider: quizProvider)),*/
       ],
       child: const MyApp(),
     ),
@@ -30,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Quiz',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,

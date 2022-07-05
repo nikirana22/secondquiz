@@ -54,15 +54,19 @@ class TimerProvider with ChangeNotifier {
 /*    print("switchTimerState: ${_timerState != timerState}");
     print("switchTimerState: currentTimerState is: $_timerState");
     print("switchTimerState: passed in Timer state  is: $timerState");*/
-    if (timerState != _timerState) {
+    if (timerState != _timerState && time>3) {
       stopCurrentTimer();
       _timerState = timerState;
       time = timerState.value;
       initTimer();
+
     }
   }
 
   void _resetTimer() {
+    if(_timerState==TIMER_STATE.tenSecondTimerState){
+      Provider.of<QuizProvider>(context,listen: false).timeFinishedwithoutClick();
+    }
     stopCurrentTimer();
     _timerState = TIMER_STATE.tenSecondTimerState;
     time = _timerState.value;

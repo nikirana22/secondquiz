@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz/provider/timer_provider.dart';
-
 import '../provider/quiz_provider.dart';
 
 class Answers extends StatefulWidget {
-  Answers({Key? key}) : super(key: key);
+  const Answers({Key? key}) : super(key: key);
 
   @override
   State<Answers> createState() => _AnswersState();
@@ -25,7 +24,6 @@ class _AnswersState extends State<Answers> {
 
   @override
   Widget build(BuildContext context) {
-    print('check if this is calling on every tick--------------------------');
     QuizProvider quizProvider = Provider.of<QuizProvider>(context);
     var timerProvider = Provider.of<TimerProvider>(context, listen: false);
     Size size = MediaQuery.of(context).size;
@@ -47,16 +45,11 @@ class _AnswersState extends State<Answers> {
                 ),
                 ListTile(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
+                      borderRadius: BorderRadius.circular(15)),
                   tileColor: changeTileColorOnButtonClick(
                       quizProvider.isCorrectAnswer(index),
-                      index /*will allso need listview indes if we need to only change the selected btn*/) /*quizProvider.colorList[index]*/,
-                  trailing: _selectedValue != null &&
-                          quizProvider.isCorrectAnswer(index)
-                      ? const Icon(Icons.check)
-                      : const Icon(Icons.cancel_outlined),
-                  /*quizProvider.iconList[index]*/
-                  /*enabled: quizProvider.clickable,*/
+                      index),
+                  trailing: changeTileIconOnButtonClick(quizProvider.isCorrectAnswer(index), index),
                   title: Text(
                     (quizProvider.list[quizProvider.questionIndex]["answer"]
                         as List<String>)[index],
@@ -68,7 +61,6 @@ class _AnswersState extends State<Answers> {
                   ),
                   onTap: _selectedValue == null
                       ? () {
-                          print('index $index');
                           _selectedValue = index;
                           quizProvider.optionSelected(index);
                           timerProvider
@@ -84,21 +76,29 @@ class _AnswersState extends State<Answers> {
     );
   }
 
+  Icon changeTileIconOnButtonClick(bool isCorrectAnswer, int index) {
+    Icon icon = const Icon(Icons.check_box_outline_blank);
+    if (_selectedValue != null && _selectedValue == index) {
+      if (isCorrectAnswer) {
+        icon = const Icon(Icons.check,color: Colors.white,);
+      } else {
+        icon = const Icon(Icons.cancel_outlined);
+      }
+    }
+    return icon;
+  }
+
   //refactor to a better name
   Color changeTileColorOnButtonClick(bool isCorrectAnswer, int index) {
     Color tileColor = Colors.white;
-    /*if (_selectedValue == null) {
-      tileColor = Colors.white;
-    } else*/
+
     if (_selectedValue != null && _selectedValue == index) {
       if (isCorrectAnswer) {
-        tileColor = Colors.green;
+        tileColor =const Color.fromRGBO(203, 199, 4, 1);
       } else {
         tileColor = Colors.red;
       }
     }
-    // _selectedValue=-1;
-    // _selectedValue=null;
     return tileColor;
   }
 }
