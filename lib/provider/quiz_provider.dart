@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/foundation.dart';
 
 class QuizProvider with ChangeNotifier {
-
   List<Map<String, Object>> list = [
     {
       'question': 'what is your name',
@@ -51,31 +50,24 @@ class QuizProvider with ChangeNotifier {
   int _life = 3;
   bool shouldShowResult = false;
 
-
-  // final List<Icon> iconList = [
-  //   const Icon(Icons.check_box_outline_blank),
-  //   const Icon(Icons.check_box_outline_blank),
-  //   const Icon(Icons.check_box_outline_blank)
-  // ];
-  // final List<Color> colorList = [Colors.white, Colors.white, Colors.white];
   int get questionIndex => _questionIndex;
+
   int get life => _life;
+
   int get result => _result;
 
-  void next() {
-    if (_questionIndex < list.length - 1) {
+  void next(bool shouldDecreaseLife) {
+    debugPrint("questionIndex: $_questionIndex & life is: $_life");
+    if (_questionIndex < list.length - 1 && _life > 0) {
+      if (shouldDecreaseLife) {
+        decreaseLife();
+      }
       _questionIndex++;
     } else {
       shouldShowResult = true;
     }
     notifyListeners();
   }
-
-  // void resetButton() {
-  //   _questionIndex = 0;
-  //   _life=3;
-  //   _result=0;
-  // }
 
   bool isLastQuestion() {
     return questionIndex == list.length - 1;
@@ -86,31 +78,30 @@ class QuizProvider with ChangeNotifier {
         list[_questionIndex]["ans"];
   }
 
-  void timeFinishedwithoutClick(){
-    lifeDecrease();
+  void optionSelected(int index) {
+    if (isCorrectAnswer(index)) {
+      _result++;
+    } else {
+      decreaseLife();
+    }
+    notifyListeners();
   }
 
-  void resultIncrease(){
-    _result++;
-  }
-  void optionSelected(int index){
-    if(isCorrectAnswer(index)){
-      resultIncrease();
-    }
-    else{
-      lifeDecrease();
-    }
-  }
-
-  void lifeDecrease() {
+  //This is not working, the quiz still continues after hitting 0 lifes
+  void decreaseLife() {
     if (_life > 0) {
       _life--;
+    } else {
+      shouldShowResult = true;
     }
+    debugPrint("life: $life");
   }
-void resetQuiz(){
-  _result=0;
-   _questionIndex = 0;
-   _life = 3;
-   shouldShowResult=false;
+
+  void resetQuiz() {
+    _result = 0;
+    _questionIndex = 0;
+    _life = 3;
+    shouldShowResult = false;
+    notifyListeners();
   }
 }

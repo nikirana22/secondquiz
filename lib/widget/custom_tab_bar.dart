@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import '../provider/quiz_provider.dart';
 
+import '../provider/quiz_provider.dart';
 import '../provider/timer_provider.dart';
 
 class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,7 +10,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<TimerProvider>(context, listen: false).initTimer();
+    Provider.of<TimerProvider>(context, listen: false)
+        .initTimerForState(TIMER_STATE.tenSecondTimerState);
     Size size = MediaQuery.of(context).size;
     double height = size.height;
     double width = size.width;
@@ -77,7 +78,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
                   border: Border.all(
                     color: Colors.white,
                   ),
-                  borderRadius:const BorderRadius.all(Radius.circular(15))),
+                  borderRadius: const BorderRadius.all(Radius.circular(15))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -86,15 +87,14 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
                     width: 15,
                     color: Colors.white,
                   ),
-
-                  Selector<QuizProvider,int>(
-                    selector: (_,provider){
+                  Selector<QuizProvider, int>(
+                    selector: (_, provider) {
                       return provider.life;
                     },
-                    builder: (_,life,child){
+                    builder: (_, life, child) {
                       return Text(
                         life.toString(),
-                        style:const TextStyle(
+                        style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       );
                     },

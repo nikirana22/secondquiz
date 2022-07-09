@@ -49,28 +49,18 @@ class TimerProvider with ChangeNotifier {
   }
 
   //TODO: need to test
-
+  //TODO for Sahil -> Why time needs to be greater than 3?
   void switchTimerState(TIMER_STATE timerState) {
-/*    print("switchTimerState: ${_timerState != timerState}");
-    print("switchTimerState: currentTimerState is: $_timerState");
-    print("switchTimerState: passed in Timer state  is: $timerState");*/
-    if (timerState != _timerState && time>3) {
+    if (timerState != _timerState) {
       stopCurrentTimer();
-      _timerState = timerState;
-      time = timerState.value;
-      initTimer();
-
+      initTimerForState(timerState);
     }
   }
 
+  //TODO for Sahil -> Find out the scenario where the logic here earlier would fail
   void _resetTimer() {
-    if(_timerState==TIMER_STATE.tenSecondTimerState){
-      Provider.of<QuizProvider>(context,listen: false).timeFinishedwithoutClick();
-    }
     stopCurrentTimer();
-    _timerState = TIMER_STATE.tenSecondTimerState;
-    time = _timerState.value;
-    initTimer();
+    initTimerForState(TIMER_STATE.tenSecondTimerState);
   }
 
   /// Managing both timer here for both Ten second as well as three second
@@ -78,26 +68,37 @@ class TimerProvider with ChangeNotifier {
   ///
   /// @author: Ehtishaam
 
-  void initTimer() {
-    stopCurrentTimer();
+  void initTimerForState(TIMER_STATE timerState) {
+    _timerState = timerState;
+    time = timerState.value;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time > 0) {
-        notifyListeners();
         time--;
       } else {
         onTimeFinished();
       }
+      notifyListeners();
     });
   }
 
+  bool isTimeOver() {
+    return time == 0;
+  }
+
+  //TODO on restarting quiz time is automatically 0
   void onTimeFinished() {
+    debugPrint("onTimeFinished: time: $time");
     var provider = Provider.of<QuizProvider>(context, listen: false);
-    if (provider.isLastQuestion()) {
+    if (provider.isLastQuestion() || provider.life == 0) {
       stopCurrentTimer();
+      provider.next(false);
     } else {
+      //This needs to execute before the timer has been reset,
+      // if the currentTimerState is 10 sec timer that means the user has not
+      // selected anything otherwise it could be 3 sec timer as well
+      provider.next(isTimeOver() && currentTimerState == TIMER_STATE.tenSecondTimerState);
       _resetTimer();
     }
-    provider.next();
   }
 
   double get currentCountDownPercent {

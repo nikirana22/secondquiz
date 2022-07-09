@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
 import '../provider/quiz_provider.dart';
 import '../screen/result.dart';
 import '../widget/answers.dart';
@@ -13,61 +15,40 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
-    double width = size.width;
-    Provider.of<QuizProvider>(context);
     return Selector<QuizProvider, bool>(
       selector: (_, quizProvider) {
         return quizProvider.shouldShowResult;
       },
       builder: (_, showResult, child) => showResult
-          ? const Result():
-                    Container(
-            decoration:const BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(49, 148, 244, 1),
-                      Color.fromRGBO(84, 114, 236, 1),
-                    ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter
-                )
-            ),
-                child:
-           Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: const CustomTabBar(
-
+          ? const Result()
+          : Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Color.fromRGBO(49, 148, 244, 1),
+                  Color.fromRGBO(84, 114, 236, 1),
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               ),
-              body: SingleChildScrollView(
-                child: Padding(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: const CustomTabBar(),
+                body: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image.asset(
-                        'assets/boat.png',
-                        width: width * 0.9,
+                      SvgPicture.asset(
+                        'assets/banner.svg',
                         height: height * 0.25,
-                      ),
-                      Consumer<QuizProvider>(
-                        builder:
-                            (BuildContext context, provider, Widget? child) {
-                          return Text(
-                            'question ${provider.questionIndex + 1} of ${provider.list.length}',
-                            style: const TextStyle(
-                                color: Colors.white70, fontSize: 17),
-                          );
-                        },
+                        fit: BoxFit.cover,
                       ),
                       const Question(),
-                      Answers()
+                      const Answers(),
                     ],
                   ),
                 ),
               ),
             ),
-      ),
-    ); /*quizProvider.questionIndex >= quizProvider.list.length-1*/
+    );
   }
 }

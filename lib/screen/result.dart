@@ -42,11 +42,6 @@ class _ResultState extends State<Result> with TickerProviderStateMixin {
           IconButton(
             onPressed: () {
               quizProvider.resetQuiz();
-              Navigator.of(
-                context,
-              ).pushReplacement(MaterialPageRoute(builder: (_) {
-                return const Home();
-              }));
             },
             icon: const Icon(Icons.close),
           )
